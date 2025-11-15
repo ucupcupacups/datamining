@@ -44,18 +44,14 @@ st.markdown("""
 }
 
 </style>
-
-<div class="header-container" style="text-align:center; margin-top:10px;">
-    <!-- Logo UNPAM -->
-    <img src="assets/logo.png" alt="Logo UNPAM" style="width:90px; margin-bottom:10px;">
-
-    <!-- Teks Header -->
-    <div class="header-text" style="font-weight:bold; font-size:16px; line-height:1.4;">
-        PROGRAM STUDI TEKNIK INFORMATIKA<br>
-        FAKULTAS ILMU KOMPUTER<br>
-        UNIVERSITAS PAMULANG
+    <div style="text-align:center; margin-top:10px;">
+        <img src="assets/logo.png" style="width:100px; margin-bottom:10px;" />
+        <div style="font-weight:bold; font-size:18px; line-height:1.4;">
+            PROGRAM STUDI TEKNIK INFORMATIKA<br>
+            FAKULTAS ILMU KOMPUTER<br>
+            UNIVERSITAS PAMULANG
+        </div>
     </div>
-</div>
 """, unsafe_allow_html=True)
 
 # Garis pemisah
