@@ -18,42 +18,6 @@ menu_list = [
 if "menu_index" not in st.session_state:
     st.session_state.menu_index = 0
 
-# ===== HEADER TOPI SKRIPSI =====
-# CSS untuk header fix di pojok kiri atas
-st.markdown("""
-<style>
-
-.header-container {
-    position: fixed;
-    top: 100px;
-    left: 15px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    z-index: 999;
-}
-
-.header-text {
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 1.4;
-}
-
-.stApp {
-    background: linear-gradient(120deg, #e0eafc, #cfdef3);
-}
-
-</style>
-    <div style="text-align:center; margin-top:10px;">
-        <img src="assets/logo.png" style="width:100px; margin-bottom:10px;" />
-        <div style="font-weight:bold; font-size:18px; line-height:1.4;">
-            PROGRAM STUDI TEKNIK INFORMATIKA<br>
-            FAKULTAS ILMU KOMPUTER<br>
-            UNIVERSITAS PAMULANG
-        </div>
-    </div>
-""", unsafe_allow_html=True)
-
 # Garis pemisah
 st.markdown("""
 <hr style="border: 2px solid #000; margin-top: 20px;">
