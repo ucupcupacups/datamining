@@ -588,17 +588,6 @@ elif menu == "Distribusi Variabel":
     
             st.subheader(f"📈 Curah Hujan Harian — {pilih_bulan} {pilih_tahun}")
             st.line_chart(df_plot, x="tanggal", y="curah_hujan")
-    
-    # =======================================================
-    #     TABEL RINGKASAN (FORMAT 3 DIGIT + "mm")
-    # =======================================================
-    st.write("📋 Data Curah Hujan (Tabel Ringkas)")
-    
-    df_show = df_plot.copy()
-    df_show["curah_hujan"] = df_show["curah_hujan"].apply(lambda x: f"{int(x):03d} mm")
-    
-    st.dataframe(df_show, use_container_width=True)
-
 
 #==================================================================================================
 elif menu == "Implementasi Model":
