@@ -73,42 +73,30 @@ st.markdown(
 # ======================
 # SIDEBAR MENU
 # ======================
-sidebar_bg = """
-<style>
-/* Sidebar container */
-[data-testid="stSidebar"] {
-    position: relative;
-    overflow: hidden;
-}
+st.sidebar.image("assets/logo.png", width=100)
+st.sidebar.title("Analisis Perbandingan Teknik Data Mining")
+st.sidebar.subheader("Prediksi Curah Hujan di Kota Tangerang Selatan")
 
-/* Background image hanya untuk backdrop */
-[data-testid="stSidebar"]::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("assets/gedung.png");
-    background-size: cover;
-    background-position: center;
-    filter: blur(6px) brightness(0.85);
-    z-index: 1;
-}
+# Radio menu dikontrol dari session_state
+menu = st.sidebar.radio(
+    "Pilih Menu:",
+    menu_list,
+    index=st.session_state.menu_index
+)
 
-/* Semua isi sidebar muncul di atas background */
-[data-testid="stSidebar"] > div {
-    position: relative;
-    z-index: 2;
-}
+# Update session_state saat user klik manual
+if menu_list.index(menu) != st.session_state.menu_index:
+    st.session_state.menu_index = menu_list.index(menu)
 
-/* Teks sidebar warna hitam */
-[data-testid="stSidebar"] * {
-    color: black !important;
-}
-</style>
-"""
-st.markdown(sidebar_bg, unsafe_allow_html=True)
+# Spacer dan Footer
+st.sidebar.markdown("", unsafe_allow_html=True)
+st.sidebar.markdown("""
+---
+Teknik Informatika<br>
+Fakultas Ilmu Komputer <br>
+Universitas Pamulang 
+<br> 2025
+""", unsafe_allow_html=True)
 
 
 # ======================
