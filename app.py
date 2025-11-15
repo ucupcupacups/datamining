@@ -73,6 +73,22 @@ st.markdown(
 # ======================
 # SIDEBAR MENU
 # ======================
+sidebar_bg = """
+<style>
+[data-testid="stSidebar"] {
+    background-image: url("assets/gedung.png");
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.45); /* meredupkan agar teks terlihat */
+}
+
+[data-testid="stSidebar"] * {
+    color: white !important;  /* bikin teks tetap terlihat */
+}
+</style>
+"""
+st.markdown(sidebar_bg, unsafe_allow_html=True)
+
 st.sidebar.image("assets/logo.png", width=100)
 st.sidebar.title("Analisis Perbandingan Teknik Data Mining")
 st.sidebar.subheader("Prediksi Curah Hujan di Kota Tangerang Selatan")
