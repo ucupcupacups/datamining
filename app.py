@@ -76,14 +76,34 @@ st.markdown(
 sidebar_bg = """
 <style>
 [data-testid="stSidebar"] {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background image khusus, tidak mempengaruhi isi */
+[data-testid="stSidebar"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url("assets/gedung.png");
     background-size: cover;
     background-position: center;
-    filter: brightness(0.45); /* meredupkan agar teks terlihat */
+    filter: blur(4px) brightness(0.7);
+    z-index: 1;     /* background */
 }
 
+/* Konten sidebar di atas background */
+[data-testid="stSidebar"] > div {
+    position: relative;
+    z-index: 2;     /* isi sidebar */
+}
+
+/* Teks sidebar biar tetap jelas */
 [data-testid="stSidebar"] * {
-    color: white !important;  /* bikin teks tetap terlihat */
+    color: white !important;
 }
 </style>
 """
