@@ -508,70 +508,86 @@ elif menu == "Distribusi Variabel":
 
     st.markdown("<hr>", unsafe_allow_html=True)
     
-    # ============================
-    #   GRAFIK KHUSUS CURAH HUJAN
-    # ============================
+    # =============================================
+    #     GRAFIK CURAH HUJAN LENGKAP (2022-2024)
+    # =============================================
     
-    st.markdown("<h3 style='margin-top:40px;'>📈 Tren Curah Hujan (2022–2024)</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='margin-top:40px;'>🌧️ Grafik Curah Hujan (Filter Tahun & Bulan)</h3>", unsafe_allow_html=True)
     
     df = pd.read_csv("datasetbmkg_clean_final.csv")
     
-    # Pastikan kolom tanggal menjadi datetime
+    # Pastikan kolom tanggal datetime
     df['tanggal'] = pd.to_datetime(df['tanggal'])
     
-    # Extract tahun & bulan
+    # Kolom tahun & bulan
     df['tahun'] = df['tanggal'].dt.year
     df['bulan'] = df['tanggal'].dt.month
+    df['bulan_nama'] = df['tanggal'].dt.strftime('%B')
     
-    # ---------------------------
-    # PILIHAN FILTER
-    # ---------------------------
+    # Pilih Tahun
     pilih_tahun = st.selectbox(
         "Pilih Tahun:",
         ["Semua Tahun", 2022, 2023, 2024]
     )
     
-    pilih_mode = st.radio(
-        "Pilih Mode Tampilan:",
-        ["Per Tahun (Rata-rata)", "Per Bulan", "Timeline Full"]
-    )
-    
-    # ---------------------------
-    # FILTER DATA BERDASARKAN TAHUN
-    # ---------------------------
+    # Jika pilih tahun tertentu, munculkan pilihan bulan
     if pilih_tahun != "Semua Tahun":
-        df_filtered = df[df['tahun'] == pilih_tahun]
+        pilih_bulan = st.selectbox(
+            "Pilih Bulan:",
+            ["Semua Bulan", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+             "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+        )
     else:
-        df_filtered = df.copy()
+        pilih_bulan = "Semua Bulan"
     
-    # ---------------------------
-    # MODE 1 : RATA-RATA PER TAHUN
-    # ---------------------------
-    if pilih_mode == "Per Tahun (Rata-rata)":
-        df_yearly = df_filtered.groupby("tahun")["curah_hujan"].mean().reset_index()
+    # =============================================
+    #       FILTER DATA BERDASARKAN PILIHAN
+    # =============================================
     
-        st.write("**Rata-rata Curah Hujan per Tahun (mm)**")
-        st.bar_chart(df_yearly, x="tahun", y="curah_hujan")
+    df_filtered = df.copy()
     
-    # ---------------------------
-    # MODE 2 : PER BULAN
-    # ---------------------------
-    elif pilih_mode == "Per Bulan":
-        df_monthly = df_filtered.groupby(["tahun", "bulan"])["curah_hujan"].sum().reset_index()
+    # Filter tahun jika dipilih
+    if pilih_tahun != "Semua Tahun":
+        df_filtered = df_filtered[df_filtered['tahun'] == pilih_tahun]
     
-        df_monthly['label'] = df_monthly['tahun'].astype(str) + "-" + df_monthly['bulan'].astype(str)
+        # Filter bulan jika dipilih bulan spesifik
+        if pilih_bulan != "Semua Bulan":
+            mapping_bulan = {
+                "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6,
+                "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12
+            }
+            bulan_angka = mapping_bulan[pilih_bulan]
+            df_filtered = df_filtered[df_filtered['bulan'] == bulan_angka]
     
-        st.write("**Total Curah Hujan per Bulan (mm)**")
-        st.line_chart(df_monthly, x="label", y="curah_hujan")
+    # =============================================
+    #        FORMAT CURAH HUJAN 3 DIGIT + "mm"
+    # =============================================
+    df_filtered['curah_hujan_fmt'] = df_filtered['curah_hujan'].apply(lambda x: f"{int(x):03d} mm")
     
-    # ---------------------------
-    # MODE 3 : TIMELINE FULL (HARIAN)
-    # ---------------------------
-    elif pilih_mode == "Timeline Full":
-        df_daily = df_filtered.sort_values("tanggal")
+    # =============================================
+    #               TAMPILKAN GRAFIK
+    # =============================================
+    st.subheader("📈 Grafik Curah Hujan")
     
-        st.write("**Curah Hujan Harian**")
-        st.line_chart(df_daily, x="tanggal", y="curah_hujan")
+    if df_filtered.empty:
+        st.warning("Tidak ada data pada pilihan filter Anda.")
+    else:
+        # Pakai line chart
+        st.line_chart(
+            df_filtered,
+            x="tanggal",
+            y="curah_hujan",
+            height=350
+        )
+    
+    # =============================================
+    #            TABEL DATA (OPSIONAL)
+    # =============================================
+    st.write("📋 Data Curah Hujan (Sudah Difilter)")
+    st.dataframe(
+        df_filtered[['tanggal', 'curah_hujan_fmt']],
+        use_container_width=True
+    )
 
 #==================================================================================================
 elif menu == "Implementasi Model":
