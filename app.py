@@ -75,12 +75,13 @@ st.markdown(
 # ======================
 sidebar_bg = """
 <style>
+/* Sidebar container */
 [data-testid="stSidebar"] {
     position: relative;
     overflow: hidden;
 }
 
-/* Background image khusus, tidak mempengaruhi isi */
+/* Background image hanya untuk backdrop */
 [data-testid="stSidebar"]::before {
     content: "";
     position: absolute;
@@ -91,48 +92,23 @@ sidebar_bg = """
     background-image: url("assets/gedung.png");
     background-size: cover;
     background-position: center;
-    filter: blur(4px) brightness(0.7);
-    z-index: 1;     /* background */
+    filter: blur(6px) brightness(0.85);
+    z-index: 1;
 }
 
-/* Konten sidebar di atas background */
+/* Semua isi sidebar muncul di atas background */
 [data-testid="stSidebar"] > div {
     position: relative;
-    z-index: 2;     /* isi sidebar */
+    z-index: 2;
 }
 
-/* Teks sidebar biar tetap jelas */
+/* Teks sidebar warna hitam */
 [data-testid="stSidebar"] * {
-    color: white !important;
+    color: black !important;
 }
 </style>
 """
 st.markdown(sidebar_bg, unsafe_allow_html=True)
-
-st.sidebar.image("assets/logo.png", width=100)
-st.sidebar.title("Analisis Perbandingan Teknik Data Mining")
-st.sidebar.subheader("Prediksi Curah Hujan di Kota Tangerang Selatan")
-
-# Radio menu dikontrol dari session_state
-menu = st.sidebar.radio(
-    "Pilih Menu:",
-    menu_list,
-    index=st.session_state.menu_index
-)
-
-# Update session_state saat user klik manual
-if menu_list.index(menu) != st.session_state.menu_index:
-    st.session_state.menu_index = menu_list.index(menu)
-
-# Spacer dan Footer
-st.sidebar.markdown("", unsafe_allow_html=True)
-st.sidebar.markdown("""
----
-Teknik Informatika<br>
-Fakultas Ilmu Komputer <br>
-Universitas Pamulang 
-<br> 2025
-""", unsafe_allow_html=True)
 
 
 # ======================
