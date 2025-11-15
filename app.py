@@ -506,6 +506,73 @@ elif menu == "Distribusi Variabel":
         else:
             st.warning("Kolom 'curah_hujan' tidak ditemukan untuk analisis korelasi.")
 
+    st.markdown("<hr>", unsafe_allow_html=True)
+    
+    # ============================
+    #   GRAFIK KHUSUS CURAH HUJAN
+    # ============================
+    
+    st.markdown("<h3 style='margin-top:40px;'>📈 Tren Curah Hujan (2022–2024)</h3>", unsafe_allow_html=True)
+    
+    df = pd.read_csv("datasetbmkg_clean_final.csv")
+    
+    # Pastikan kolom tanggal menjadi datetime
+    df['tanggal'] = pd.to_datetime(df['tanggal'])
+    
+    # Extract tahun & bulan
+    df['tahun'] = df['tanggal'].dt.year
+    df['bulan'] = df['tanggal'].dt.month
+    
+    # ---------------------------
+    # PILIHAN FILTER
+    # ---------------------------
+    pilih_tahun = st.selectbox(
+        "Pilih Tahun:",
+        ["Semua Tahun", 2022, 2023, 2024]
+    )
+    
+    pilih_mode = st.radio(
+        "Pilih Mode Tampilan:",
+        ["Per Tahun (Rata-rata)", "Per Bulan", "Timeline Full"]
+    )
+    
+    # ---------------------------
+    # FILTER DATA BERDASARKAN TAHUN
+    # ---------------------------
+    if pilih_tahun != "Semua Tahun":
+        df_filtered = df[df['tahun'] == pilih_tahun]
+    else:
+        df_filtered = df.copy()
+    
+    # ---------------------------
+    # MODE 1 : RATA-RATA PER TAHUN
+    # ---------------------------
+    if pilih_mode == "Per Tahun (Rata-rata)":
+        df_yearly = df_filtered.groupby("tahun")["curah_hujan"].mean().reset_index()
+    
+        st.write("**Rata-rata Curah Hujan per Tahun (mm)**")
+        st.bar_chart(df_yearly, x="tahun", y="curah_hujan")
+    
+    # ---------------------------
+    # MODE 2 : PER BULAN
+    # ---------------------------
+    elif pilih_mode == "Per Bulan":
+        df_monthly = df_filtered.groupby(["tahun", "bulan"])["curah_hujan"].sum().reset_index()
+    
+        df_monthly['label'] = df_monthly['tahun'].astype(str) + "-" + df_monthly['bulan'].astype(str)
+    
+        st.write("**Total Curah Hujan per Bulan (mm)**")
+        st.line_chart(df_monthly, x="label", y="curah_hujan")
+    
+    # ---------------------------
+    # MODE 3 : TIMELINE FULL (HARIAN)
+    # ---------------------------
+    elif pilih_mode == "Timeline Full":
+        df_daily = df_filtered.sort_values("tanggal")
+    
+        st.write("**Curah Hujan Harian**")
+        st.line_chart(df_daily, x="tanggal", y="curah_hujan")
+
 #==================================================================================================
 elif menu == "Implementasi Model":
     st.title("📄 Implementasi Model")
